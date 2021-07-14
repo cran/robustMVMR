@@ -1,18 +1,18 @@
-#' Perform the robust multivariable mendelian randomization analysis
+#' Perform the robust multivariable Mendelian randomization analysis
 #'
-#' @description The \code{robustMVMR} perform the robust multivariable Mendelian
-#'     randomization (robustMVMR) analysis in the two-sample MR setting based on the
+#' @description The \pkg{robustMVMR} perform the robust multivariable Mendelian
+#'     randomization ('robustMVMR') analysis in the two-sample MR setting based on the
 #'     MM-estimator.The conventional multivariable Mendelian randomization (MVMR) estimate
 #'     the causal effect by employing the weighted least square estimators, in
 #'     which the inverse variance of the SNPs-outcome association is arbitrarily
 #'     selected as the weights with an additional assumption about the
 #'     heteroskedastic error. When all the instrument assumptions of MVMR are
-#'     satisified; that is,
+#'     satisfied; that is,
 #'     \itemize{
 #'       \item{the variant is associated with at least 1 of the risk factor;}
 #'       \item{the variant is not associated with a confounder of any of the
 #'                  risk-outcome associations;}
-#'       \item{the variant is conditionally independet of the outcome given
+#'       \item{the variant is conditionally independent of the outcome given
 #'                  the risk factors and confounders;}
 #'       \item{the variants are required to be independent;}
 #'       \item{the heteroskedastic error;}
@@ -20,17 +20,14 @@
 #'     }
 #'
 #'     Violation of any one of the aforementioned assumptions can cause severe
-#'     bias in MVMR. The \code{robustMVMR} produces the robust causal effect and
+#'     bias in MVMR. The \pkg{robustMVMR} produces the robust causal effect and
 #'     robust standard errors based on the MM-estimates, which has been demonstrated
 #'     to protect against the heteroskedasticity, autocorrelation, and the
-#'     presence of outliers.The interested reader is refered to
-#'     Yohai (1987) paper and
-#'     Crousx et al (2004) paper.
-#'     In MR setting, outliters of
-#'     the multi-instruments may indicate the horizontal pleiotropic effect, which
-#'     has been comprehensively discussed in
-#'      www.nature.com/articles/s41588-018-0099-7{Verbnck et al
-#'     (2018) paper} in univariable MR setting.
+#'     presence of outliers.The interested reader is referred to Yohai (1987) paper
+#'     and Crousx et al (2004) paper. In MR setting, outliers of the multi-instruments
+#'     may indicate the horizontal pleiotropic effect, which has been comprehensively
+#'     discussed in Verbnck et al (2018)[www.nature.com/articles/s41588-018-0099-7]
+#'     in univariable MR setting.
 #'
 #'     Notable, the assumption of heteroskedastic error in MVMR setting has a
 #'     key role in estimating the causal effect and its standard error. However,
@@ -40,39 +37,45 @@
 #'     happen in the MVMR setting, especially when the multiple independent
 #'     instruments are clumped by using the 1000 Genome Project as the reference.
 #'     Furthermore, the function of these selected variants are not fully understood;
-#'     that is, the horizomental pleiotropy (or outliters) may also arise. The
+#'     that is, the horizontal pleiotropy (or outliers) may also arise. The
 #'     results from Verbank et al (2018) paper reported that almost half
 #'     (around 48\%) of significant causal relationship in MR suffered from the
 #'     horizontal pleiotropy. The effect of the horizontal pleiotropy on the
 #'     "true" causal estimates ranged from -131\% to 201\%, with a false-positive
-#'     rate of 10\%. In such a case, the \code{robustMVMR} would provide better
+#'     rate of 10\%. In such a case, the \pkg{robustMVMR} would provide better
 #'     estimates and standard errors of the causal effect than those in the
 #'     conventional MVMR.
 #'
 #'     Furthermore, the overall conditional F-statistic for testing conditional weak
 #'     instrument bias and the modified Q-statistic for testing the instrument
 #'     validity in the multivariable Mendelian randomization proposed by
-#'     Sanderson et al. (2020)
-#'     are also provided in \pkg{robustMVMR}. Along with the overall conditional
-#'     F-statistic, a pairwise conditional F-statistic matrix is also provided
-#'     to identify the possibel source of conditional weak instrument bias.
+#'     Sanderson et al. (2020) are also provided in \pkg{robustMVMR}. Along with
+#'      the overall conditional F-statistic, a pairwise conditional F-statistic
+#'     matrix is also provided to identify the possible source of conditional
+#'     weak instrument bias.
 #'
 #'     Lastly, the data-driven result about the correlation matrix of exposure
 #'     is also reported in \pkg{robustMVMR}. Such a matrix is derived from the
-#'     standard error of each exposure under the heteroskedasticity assuption. The
-#'     further using of this matrix shoudl be cautious.
+#'     standard error of each exposure under the heteroskedasticity assumption. The
+#'     further using of this matrix should be cautious.
+#'
+#'     An example paper using \pkg{robustMVMR} can be found here:
+#'     Yang et al. (2021) Genetic evidence on the association of interleukin
+#'     (IL)-1-mediated chronic inflammation with airflow obstruction: A Mendelian
+#'     randomization study. COPD: Journal of Chronic Obstructive
+#'     Pulmonary Disease. <doi:10.1080/15412555.2021.1955848>.
 #'
 #' @param betaGY A numeric vector of the beta-coefficient for the SNPs-outcome associations.
 #'                  For the binary outcome, the log-odds ratio estimates from the
 #'                  logistic regression analysis are strongly recommended.
 #' @param sebetaGY The numeric vector of the standard errors for the SNPs-outcome associations.
 #' @param pvalbetaGY The numeric vector of P values for the SNPs-outcome associations.
-#' @param betaGX A matrix of the beta-coeficient for the SNPs-exposures associations.
+#' @param betaGX A matrix of the beta-coefficient for the SNPs-exposures associations.
 #' @param sebetaGX The matrix of the standard error for the SNPs-exposure associations.
 #' @param pvalbetaGX The matrix of P values for the SNPs-exposure associations.
 #' @param pval_threshold The threshold of the P value for selecting the genetic variants for exposures.
 #'                         By default, \code{pval_threshold = 1e-05}.
-#' @param plot The option for return the scatter plot with the marginial effect of each exposure.
+#' @param plot The option for return the scatter plot with the marginal effect of each exposure.
 #'               By default, \code{plot = FALSE}.
 #'
 #' @importFrom lmtest bptest
@@ -86,15 +89,16 @@
 #'   \item{2. Croux, C., Dhaene, G. and Hoorelbeke, D. (2004) Robust standard errors for robust estimators. \strong{CES-Discussion paper series (DPS) 03.16}, pp.1-20.}
 #'   \item{3. Verbanck, M., Chen, C.Y., Neale, B. and Do, R. (2018) Detection of widespread horizontal pleiotropy in causal relationships inferred from Mendelian randomization between complex traits and diseases. \strong{Nature genetics}, 50(5), pp.693-698.}
 #'   \item{4. Sanderson, E., Davey Smith, G., Windmeijer, F. and Bowden, J. (2019) An examination of multivariable Mendelian randomization in the single-sample and two-sample summary data settings. \strong{International journal of epidemiology}, 48(3), pp.713-727.}
+#'   \item{5. Yang, Z., Schooling, C.M., and Kwok, M.K. (2021) Genetic evidence on the association of interleukin (IL)-1-mediated chronic inflammation with airflow obstruction: A Mendelian randomization study. \strong{COPD: Journal of Chronic Obstructive Pulmonary Disease}. doi:10.1080/15412555.2021.1955848.}
 #' }
 #'
-#' @return A list contains nine components, includeing
+#' @return A list contains nine components, including
 #'     \describe{
 #'       \item{Breusch_Pagen_test}{The \strong{Breusch Pagen test} for the heteroskedasticity assumption. Rejecting the NULL hypothesis indicate the violation of the heteroskedastic error.}
 #'       \item{mvMRResult_homo_robust}{The results from the robust multivariable Mendelian randomization with the weights being 1.}
 #'       \item{mvMRResult_heter_burgess}{The results from the conventional MVMR analysis with the weights being \code{1/sebetaGY^2}.}
-#'       \item{mvMRResult_heter_robust}{The results from the robust multivariable Mendelian randomzaition with the weights being \code{1/sebetaGY^2}. Of these, the conditional F-statistic is also reported.}
-#'       \item{marginalEffect}{The resulsts from the robust univariable Mendelian randomization based on the validity instruments with the weights being \code{1/sebetaGY^2}.}
+#'       \item{mvMRResult_heter_robust}{The results from the robust multivariable Mendelian randomization with the weights being \code{1/sebetaGY^2}. Of these, the conditional F-statistic is also reported.}
+#'       \item{marginalEffect}{The results from the robust univariable Mendelian randomization based on the validity instruments with the weights being \code{1/sebetaGY^2}.}
 #'       \item{Conditional_F_statistic_matrix}{The pair-wise conditional F-statistics of exposures included in the robust MVMR analysis.}
 #'       \item{Q_pleiotropy_test}{The modified Q-statistic for testing the instrument validity used in the robust MVMR analysis.}
 #'       \item{rho_Exposures}{The correlation matrix of exposures included in the robust MVMR analysis. \strong{It is worth noting that this is a data-driven result.}}

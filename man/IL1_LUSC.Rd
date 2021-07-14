@@ -4,7 +4,9 @@
 \name{IL1_LUSC}
 \alias{IL1_LUSC}
 \title{IL-1 and squamous cell lung cancer}
-\format{An matrix contains the genetic associations of the exposures and the outcome.}
+\format{
+An matrix contains the genetic associations of the exposures and the outcome.
+}
 \usage{
 data(IL1_LUSC)
 }
